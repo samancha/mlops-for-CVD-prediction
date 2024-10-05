@@ -9,7 +9,7 @@ import joblib
 
 # Load and preprocess the dataset
 print("Loading the dataset...")
-file_path = r'C:/Users/ebarn/Downloads/cardio_train.csv'
+file_path = r'/Users/Steve/dev/GitProjects/mlops-for-CVD-prediction/cardio_train.csv'
 df = pd.read_csv(file_path, sep=";")
 
 print("Dataset loaded successfully. Now filling missing values with the median...")
