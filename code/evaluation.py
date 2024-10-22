@@ -10,9 +10,46 @@ import xgboost
 
 from sklearn.metrics import mean_squared_error
 
+def evaluate_model(name, model):
+    print(f"Evaluating model: {name}...")
+    y_pred = model.predict(X_test)
+    y_pred_prob = model.predict_proba(X_test)[:, 1] if hasattr(model, 'predict_proba') else model.decision_function(X_test)
+
+    accuracy = accuracy_score(y_test, y_pred)
+    precision = precision_score(y_test, y_pred)
+    recall = recall_score(y_test, y_pred)
+    f1 = f1_score(y_test, y_pred)
+    roc_auc = roc_auc_score(y_test, y_pred_prob)
+
+    print(f"Model {name} evaluation complete.")
+    return {
+        "Model": name,
+        "Accuracy": accuracy,
+        "Precision": precision,
+        "Recall": recall,
+        "F1-Score": f1,
+        "AUC": roc_auc
+    }
 
 if __name__ == "__main__":
+    model_path = f"/opt/ml/processing/model/model.tar.gz"
+    with tarfile.open(model_path) as tar:
+        tar.extractall(path=".")
 
+    model = pickle.load(open("xgboost-model", "rb"))
+
+    test_path = "/opt/ml/processing/test/test.csv"
+    df = pd.read_csv(test_path, header=None)
+    name= 'TEST-MODEL'
+    print(name)
+    evaluation_metrics = evaluate_model(name, model)
+
+    output_dir = "/opt/ml/processing/evaluation"
+    pathlib.Path(output_dir).mkdir(parents=True, exist_ok=True)
+
+    evaluation_path = f"{output_dir}/evaluation.json"
+    with open(evaluation_path, "w") as f:
+        f.write(json.dumps(evaluation_metrics))
 
     # Code provided from lab example, add above proper code that outputs a file as model.tar.gz NO pickle
     # model_path = f"/opt/ml/processing/model/model.tar.gz"
