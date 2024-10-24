@@ -10,6 +10,7 @@ from sklearn.compose import ColumnTransformer
 from sklearn.impute import SimpleImputer
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler, OneHotEncoder
+from sklearn.model_selection import train_test_split
 
 
 # Since we get a headerless CSV file, we specify the column names here.
@@ -54,12 +55,16 @@ if __name__ == "__main__":
     base_dir = "/opt/ml/processing"
     
     # Local path where the file should be saved
-    local_path = base_dir + "/input/cardio-train.csv"
+    # local_path = base_dir + "/input/cardio-train.csv"
+    
+    # Accessing the whole raw dataset for preprocessing
+    local_path = base_dir + "/input/cardio-raw-kaggle.csv"
     
     # Download the file from S3 to the local directory and convert to dataframe
     # sagemaker.s3.S3Downloader.download(s3_uri, local_path)
     df = pd.read_csv(local_path, sep=";")
-
+    print("dataframe size / shape", df.size, df.shape)
+    
     print("Dataset loaded successfully. Now filling missing values with the median...")
     df = df.fillna(df.median())  # Fill missing values
     
