@@ -52,16 +52,13 @@ feature_columns_dtype = {
 
 if __name__ == "__main__":
     base_dir = "/opt/ml/processing"
-
-    df = pd.read_csv(
-        f"{base_dir}/train/cardio-train.csv",
-        sep=";"
-        # header=True,
-        # names=feature_columns_names + [label_column],
-        # dtype=merge_two_dicts(feature_columns_dtype, label_column_dtype),
-    )
-
-    df = pd.read_csv(file_path, sep=";")
+    
+    # Local path where the file should be saved
+    local_path = base_dir + "/input/cardio-train.csv"
+    
+    # Download the file from S3 to the local directory and convert to dataframe
+    # sagemaker.s3.S3Downloader.download(s3_uri, local_path)
+    df = pd.read_csv(local_path, sep=";")
 
     print("Dataset loaded successfully. Now filling missing values with the median...")
     df = df.fillna(df.median())  # Fill missing values
@@ -89,35 +86,3 @@ if __name__ == "__main__":
     pd.DataFrame(X_train).to_csv(f"{base_dir}/train/train.csv", header=False, index=False)
     pd.DataFrame(X_test).to_csv(f"{base_dir}/test/test.csv", header=False, index=False)
     pd.DataFrame(X_val).to_csv(f"{base_dir}/validation/validation.csv", header=False, index=False)
-
-        # pd.DataFrame(test).to_csv(f"{base_dir}/test/test.csv", header=False, index=False)
-
-
-    # NOT sure if the below is needed
-    numeric_features = list(feature_columns_names)    
-    categorical_features = list(categorical_features_names)
-    # numeric_features = list(feature_columns_names)
-    # numeric_features.remove("sex")
-
-    # create the transforming steps
-    numeric_transformer = Pipeline(
-        steps=[("imputer", SimpleImputer(strategy="median")), ("scaler", StandardScaler())]
-    )
-
-    categorical_features = ["sex"]
-    categorical_transformer = Pipeline(
-        steps=[
-            ("imputer", SimpleImputer(strategy="constant", fill_value="missing")),
-            ("onehot", OneHotEncoder(handle_unknown="ignore")),
-        ]
-    )
-
-    preprocess = ColumnTransformer(
-        transformers=[
-            ("num", numeric_transformer, numeric_features),
-            ("cat", categorical_transformer, categorical_features),
-        ]
-    )
-
-    print(df.head())
-    
