@@ -91,3 +91,7 @@ if __name__ == "__main__":
     pd.DataFrame(X_train).to_csv(f"{base_dir}/train/train.csv", header=False, index=False)
     pd.DataFrame(X_test).to_csv(f"{base_dir}/test/test.csv", header=False, index=False)
     pd.DataFrame(X_val).to_csv(f"{base_dir}/validation/validation.csv", header=False, index=False)
+
+    pd.DataFrame(y_train).to_csv(f"{base_dir}/train-labels/train.csv", header=False, index=False)
+    pd.DataFrame(y_test).to_csv(f"{base_dir}/test-labels/test.csv", header=False, index=False)
+    pd.DataFrame(y_val).to_csv(f"{base_dir}/validation-labels/validation.csv", header=False, index=False)

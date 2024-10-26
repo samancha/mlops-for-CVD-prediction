@@ -10,7 +10,7 @@ import xgboost
 
 from sklearn.metrics import mean_squared_error
 
-def evaluate_model(name, model):
+def evaluate_model(name, model, X_test):
     print(f"Evaluating model: {name}...")
     y_pred = model.predict(X_test)
     y_pred_prob = model.predict_proba(X_test)[:, 1] if hasattr(model, 'predict_proba') else model.decision_function(X_test)
@@ -40,9 +40,10 @@ if __name__ == "__main__":
 
     test_path = "/opt/ml/processing/test/test.csv"
     df = pd.read_csv(test_path, header=None)
-    name= 'TEST-MODEL'
-    print(name)
-    evaluation_metrics = evaluate_model(name, model)
+    name= 'XGBoostMODEL'
+    print("df shape", df.shape)
+    print("df 0 ", df[0])
+    evaluation_metrics = evaluate_model(name, model, df)
 
     output_dir = "/opt/ml/processing/evaluation"
     pathlib.Path(output_dir).mkdir(parents=True, exist_ok=True)
