@@ -8,12 +8,11 @@ import numpy as np
 import pandas as pd
 import xgboost as xgb
 
-
-from sklearn.metrics import mean_squared_error
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, roc_auc_score, mean_squared_error
 
 def evaluate_model(name, model, X_test, y_test):
     print(f"Evaluating model: {name}...")
-    predictions = model.predict(X_test)
+    y_pred = model.predict(X_test)
 
     # Get probability predictions if the model supports it
     if hasattr(model, 'predict_proba'):
@@ -22,12 +21,16 @@ def evaluate_model(name, model, X_test, y_test):
         y_pred_prob = model.decision_function(X_test)
     else:
         # For XGBoost Booster model, get probability predictions using DMatrix
+        print("last else")
         y_pred_prob = y_pred
 
-    accuracy = accuracy_score(y_test, predictions)
-    precision = precision_score(y_test, predictions)
-    recall = recall_score(y_test, predictions)
-    f1 = f1_score(y_test, predictions)
+    print()
+    print("shape", y_pred.shape)
+    print("First index: pred / rounded prediction", y_pred[0], (y_pred[0] > 0.5).astype(int)) 
+    accuracy = accuracy_score(y_test, (y_pred > 0.5).astype(int))
+    precision = precision_score(y_test, (y_pred > 0.5).astype(int))
+    recall = recall_score(y_test, (y_pred > 0.5).astype(int))
+    f1 = f1_score(y_test, (y_pred > 0.5).astype(int))
     roc_auc = roc_auc_score(y_test, y_pred_prob)
 
     print(f"Model {name} evaluation complete.")
@@ -54,7 +57,7 @@ if __name__ == "__main__":
     df = pd.read_csv(test_path, header=None)
     print("test df shape", df.shape)
 
-    name= 'XGBoostModel'
+    name='XGBoostModel'
 
     y_test = df.iloc[:, 0].to_numpy()
     df.drop(df.columns[0], axis=1, inplace=True)
