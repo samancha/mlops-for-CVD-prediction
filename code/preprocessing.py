@@ -60,10 +60,7 @@ def merge_two_dicts(x, y):
 if __name__ == "__main__":
     base_dir = "/opt/ml/processing"
     
-    # Local path where the file should be saved
-    # local_path = base_dir + "/input/cardio-train.csv"
-    
-    # Accessing the whole raw dataset for preprocessing
+    # Accessing the raw dataset with out headers for preprocessing
     local_path = base_dir + "/input/cardio-raw-no-header.csv"
     
     # Download the file from S3 to the local directory and convert to dataframe
@@ -102,26 +99,6 @@ if __name__ == "__main__":
 
     np.random.shuffle(X)
     train, validation, test = np.split(X, [int(0.7 * len(X)), int(0.85 * len(X))])
-    ######
-    
-    # print("dataframe size / shape", df.size, df.shape)
-    
-    # print("Dataset loaded successfully. Now filling missing values with the median...")
-    # df = df.fillna(df.median())  # Fill missing values
-    
-    # print("Converting 'gender' column to numeric (1=male, 2=female) as needed...")
-    # df['gender'] = df['gender'].map({1: 0, 2: 1})  # Convert gender to numeric
-
-    # X = df.drop(columns=['cardio'])  # Features
-    # y = df['cardio']  # Target variable
-    
-    # # Split into training (60%) and temporary (40%)
-    # print("Performing initial train-temp split with 60% training and 40% temporary...")
-    # X_train, X_temp, y_train, y_temp = train_test_split(X, y, test_size=0.4, random_state=42)
-    
-    # # Split the temporary set into validation (50%) and test (50%) sets
-    # print("Splitting temporary set into validation and test sets (each 20%)...")
-    # X_val, X_test, y_val, y_test = train_test_split(X_temp, y_temp, test_size=0.5, random_state=42)
     
     print("Train, validation, and test splits completed.")
     print("Training set size:", train.shape)
