@@ -24,9 +24,7 @@ def evaluate_model(name, model, X_test, y_test):
         print("last else")
         y_pred_prob = y_pred
 
-    print()
-    print("shape", y_pred.shape)
-    print("First index: pred / rounded prediction", y_pred[0], (y_pred[0] > 0.5).astype(int)) 
+
     accuracy = accuracy_score(y_test, (y_pred > 0.5).astype(int))
     precision = precision_score(y_test, (y_pred > 0.5).astype(int))
     recall = recall_score(y_test, (y_pred > 0.5).astype(int))
@@ -57,12 +55,17 @@ if __name__ == "__main__":
     df = pd.read_csv(test_path, header=None)
     print("test df shape", df.shape)
 
+    # label_path = "/opt/ml/processing/test/test-label.csv"
+    # label_df = pd.read_csv(label_path, header=None)
+    # print("label test df shape", label_df.shape)
+
     name='XGBoostModel'
 
     y_test = df.iloc[:, 0].to_numpy()
     df.drop(df.columns[0], axis=1, inplace=True)
 
     X_test = xgb.DMatrix(df.values)
+    # y_test = xgb.DMatrix(label_df.values)
     
     evaluation_metrics = evaluate_model(name, model, X_test, y_test)
 
@@ -72,18 +75,3 @@ if __name__ == "__main__":
     evaluation_path = f"{output_dir}/evaluation.json"
     with open(evaluation_path, "w") as f:
         f.write(json.dumps(evaluation_metrics))
-
-    # mse = mean_squared_error(y_test, predictions)
-    # std = np.std(y_test - predictions)
-    # report_dict = {
-    #     "regression_metrics": {
-    #         "mse": {"value": mse, "standard_deviation": std},
-    #     },
-    # }
-
-    # output_dir = "/opt/ml/processing/evaluation"
-    # pathlib.Path(output_dir).mkdir(parents=True, exist_ok=True)
-
-    # evaluation_path = f"{output_dir}/evaluation.json"
-    # with open(evaluation_path, "w") as f:
-    #     f.write(json.dumps(report_dict))
