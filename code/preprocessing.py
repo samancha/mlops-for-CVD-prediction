@@ -123,7 +123,7 @@ if __name__ == "__main__":
     pd.DataFrame(validation_combined).to_csv(f"{base_dir}/validation/validation.csv", header=False, index=False)
 
 
-    pd.DataFrame(x_test).to_csv(f"{base_dir}/test-x/test-x.csv", header=False, index=False)
+    pd.DataFrame(X_test).to_csv(f"{base_dir}/test-x/test-x.csv", header=False, index=False)
     pd.DataFrame(y_test).to_csv(f"{base_dir}/test-label/test-label.csv", header=True, index=False)
     # pd.DataFrame(y_val).to_csv(f"{base_dir}/validation-label/validation-label.csv", header=False, index=False)
     # pd.DataFrame(y_train).to_csv(f"{base_dir}/train-label/train-label.csv", header=False, index=False)
