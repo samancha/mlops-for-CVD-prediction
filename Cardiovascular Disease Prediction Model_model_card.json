@@ -1,7 +1,7 @@
 {
     "Model Name": "Cardiovascular Disease Prediction Model",
     "Description": "\nA model that predicts the risk of cardiovascular disease based on patient demographic and health information. \nKey features include age, gender, BMI, cholesterol, and glucose levels.\n",
-    "Date": "2024-10-20",
+    "Date": "2024-10-28",
     "Intended Use": "\nThis model is intended to help healthcare providers identify patients at high risk for cardiovascular disease, \nto support early intervention and treatment planning.\n",
     "Limitations": "\nThis model may not generalize well to populations outside the training dataset or to rare, less common cases.\nPerformance might degrade with insufficient data or noisy features.\n",
     "Performance Metrics": {

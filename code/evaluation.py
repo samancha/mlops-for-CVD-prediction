@@ -48,27 +48,23 @@ if __name__ == "__main__":
     model_path = f"/opt/ml/processing/model/model.tar.gz"
     with tarfile.open(model_path) as tar:
         tar.extractall(path=".")
-
+    
+    name='XGBoostModel'
     model = pickle.load(open("xgboost-model", "rb"))
-
     test_path = "/opt/ml/processing/test/test.csv"
     df = pd.read_csv(test_path, header=None)
-    print("test df shape", df.shape)
 
-    # label_path = "/opt/ml/processing/test/test-label.csv"
-    # label_df = pd.read_csv(label_path, header=None)
-    # print("label test df shape", label_df.shape)
-
-    name='XGBoostModel'
-
+    # seperating target variable from feature data
     y_test = df.iloc[:, 0].to_numpy()
     df.drop(df.columns[0], axis=1, inplace=True)
 
+    # Convert to expecting format to run the model
     X_test = xgb.DMatrix(df.values)
-    # y_test = xgb.DMatrix(label_df.values)
-    
+
+    # creating metrics report from above
     evaluation_metrics = evaluate_model(name, model, X_test, y_test)
 
+    # Creating and locally storing evaluation report
     output_dir = "/opt/ml/processing/evaluation"
     pathlib.Path(output_dir).mkdir(parents=True, exist_ok=True)
 

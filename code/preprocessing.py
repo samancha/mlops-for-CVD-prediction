@@ -107,36 +107,17 @@ if __name__ == "__main__":
     X_train, X_val, X_test = np.split(X_pre, [int(0.7 * len(X_pre)), int(0.85 * len(X_pre))])
     y_train, y_val, y_test = np.split(y_pre, [int(0.7 * len(y_pre)), int(0.85 * len(y_pre))])
     
-    print("Train, validation, and test splits completed.")
-    print("Training set size:", X_train.shape, " labels: ", y_train.shape)
-    print("Validation set size:", X_val.shape, " labels:", y_val.shape)
-    print("Test set size:", X_test.shape, " labels:", y_test.shape)
-
+    # Recombined data set to make compatable for hyperparameter step
     train_combined = np.concatenate([y_train.reshape(-1, 1), X_train], axis=1)
     validation_combined = np.concatenate([y_val.reshape(-1, 1), X_val], axis=1)
     test_combined = np.concatenate([y_test.reshape(-1, 1), X_test], axis=1)
-
-    
+ 
     # Writing locally to project
     pd.DataFrame(train_combined).to_csv(f"{base_dir}/train/train.csv", header=False, index=False)
     pd.DataFrame(test_combined).to_csv(f"{base_dir}/test/test.csv", header=True, index=False)
     pd.DataFrame(validation_combined).to_csv(f"{base_dir}/validation/validation.csv", header=False, index=False)
 
-
+    # Write test/batch data as separate feature values and target variables
     pd.DataFrame(X_test).to_csv(f"{base_dir}/test-x/test-x.csv", header=False, index=False)
     pd.DataFrame(y_test).to_csv(f"{base_dir}/test-label/test-label.csv", header=True, index=False)
-    # pd.DataFrame(y_val).to_csv(f"{base_dir}/validation-label/validation-label.csv", header=False, index=False)
-    # pd.DataFrame(y_train).to_csv(f"{base_dir}/train-label/train-label.csv", header=False, index=False)
-    # pd.DataFrame(y_test).to_csv(f"{base_dir}/test-label/test-label.csv", header=True, index=False)
-    # pd.DataFrame(y_val).to_csv(f"{base_dir}/validation-label/validation-label.csv", header=False, index=False)
-
-
-    # y = df.pop("cardio")
-    # X_pre = preprocess.fit_transform(df)
-    # y_pre = y.to_numpy().reshape(len(y), 1)
-
-    # X = np.concatenate((y_pre, X_pre), axis=1)
-
-    # np.random.shuffle(X)
-    # train, validation, test = np.split(X, [int(0.7 * len(X)), int(0.85 * len(X))])
     
